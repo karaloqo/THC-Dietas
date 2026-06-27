@@ -1,0 +1,1022 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hnos. CORREDOR - Dietas THC</title>
+  <style>
+    :root {
+      --bg: #eef2f7;
+      --surface: #ffffff;
+      --muted-surface: #f8fafc;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #334155;
+      --danger: #dc2626;
+      --danger-soft: #fee2e2;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    .app {
+      width: min(980px, calc(100% - 28px));
+      margin: 14px auto;
+      display: flex;
+      min-height: calc(100vh - 28px);
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 22px 24px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.1;
+    }
+
+    header p {
+      margin: 5px 0 0;
+      color: #dbeafe;
+      font-size: 14px;
+    }
+
+    main {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 22px;
+      flex: 1;
+    }
+
+    .section-title {
+      margin: 16px 0 10px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .section-title:first-child {
+      margin-top: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px 18px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .field input {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--muted-surface);
+      color: var(--text);
+      font: 17px Consolas, monospace;
+      padding: 11px 12px;
+      text-align: center;
+      outline: none;
+    }
+
+    .field input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+    }
+
+    .field input:disabled {
+      background: #e5e7eb;
+      color: var(--muted);
+    }
+
+    .help {
+      min-height: 18px;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .field.error input {
+      border-color: var(--danger);
+      background: var(--danger-soft);
+    }
+
+    .field.error .help {
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .monthly {
+      margin-top: 16px;
+      border: 1px solid var(--border);
+      background: var(--muted-surface);
+      padding: 16px;
+    }
+
+    .check-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .check-row input {
+      margin-top: 3px;
+      width: 18px;
+      height: 18px;
+    }
+
+    .monthly-note {
+      margin: 6px 0 12px 28px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .country-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      margin-left: 28px;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .country-options label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    button {
+      border: 0;
+      padding: 13px 16px;
+      color: white;
+      cursor: pointer;
+      font: 700 15px "Segoe UI", Arial, sans-serif;
+    }
+
+    .secondary {
+      background: var(--secondary);
+    }
+
+    .primary {
+      background: var(--primary);
+    }
+
+    button:hover {
+      filter: brightness(0.92);
+    }
+
+    .status {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 0 2px 4px;
+    }
+
+    dialog {
+      width: min(620px, calc(100% - 30px));
+      border: 0;
+      padding: 0;
+      box-shadow: 0 22px 70px rgba(15, 23, 42, 0.28);
+    }
+
+    dialog::backdrop {
+      background: rgba(15, 23, 42, 0.45);
+    }
+
+    .modal-bar {
+      height: 8px;
+      background: var(--primary);
+    }
+
+    .modal-bar.error {
+      background: var(--danger);
+    }
+
+    .modal-body {
+      padding: 22px;
+      background: white;
+    }
+
+    .modal-body h2 {
+      margin: 0 0 14px;
+      font-size: 22px;
+    }
+
+    .error-list {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .result-head {
+      margin-bottom: 16px;
+      padding: 18px 20px;
+      background: var(--primary);
+      color: white;
+    }
+
+    .result-head h2 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    .result-head p {
+      margin: 4px 0 0;
+      color: #dbeafe;
+      font-size: 13px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 14px;
+      font-size: 15px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--border);
+      padding: 11px 8px;
+      text-align: center;
+    }
+
+    th:first-child,
+    td:first-child {
+      text-align: left;
+    }
+
+    .note {
+      color: var(--primary-dark);
+      font-size: 13px;
+      line-height: 1.4;
+      margin-bottom: 16px;
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 720px) {
+      .grid,
+      .actions,
+      .modal-actions {
+        grid-template-columns: 1fr;
+      }
+
+      header h1 {
+        font-size: 24px;
+      }
+
+      main {
+        padding: 16px;
+      }
+
+      .monthly-note {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Hnos. CORREDOR</h1>
+      <p>Calculo manual de kilometros, dietas y pernoctas</p>
+    </header>
+
+    <main>
+      <div class="section-title">1. Kilometros</div>
+      <div class="grid">
+        <div class="field" data-field="km_salida">
+          <label for="km_salida">Kms. salida</label>
+          <input id="km_salida" autocomplete="off" inputmode="decimal">
+          <div class="help">Kilometros al salir. Ej: 120000</div>
+        </div>
+        <div class="field" data-field="km_llegada">
+          <label for="km_llegada">Kms. llegada</label>
+          <input id="km_llegada" autocomplete="off" inputmode="decimal">
+          <div class="help">Kilometros al llegar. Ej: 120850</div>
+        </div>
+      </div>
+
+      <div class="section-title">2. Fechas del viaje</div>
+      <div class="grid">
+        <div class="field" data-field="viaje_salida">
+          <label for="viaje_salida">Viaje salida</label>
+          <input id="viaje_salida" autocomplete="off" placeholder="DD/MM/AAAA HH:MM">
+          <div class="help">Formato: DD/MM/AAAA HH:MM</div>
+        </div>
+        <div class="field" data-field="viaje_llegada">
+          <label for="viaje_llegada">Viaje llegada</label>
+          <input id="viaje_llegada" autocomplete="off" placeholder="DD/MM/AAAA HH:MM">
+          <div class="help">Debe ser posterior a la salida</div>
+        </div>
+      </div>
+
+      <div class="section-title">3. Fronteras</div>
+      <div class="grid">
+        <div class="field" data-field="frontera_salida">
+          <label for="frontera_salida">1er paso de frontera</label>
+          <input id="frontera_salida" autocomplete="off" placeholder="DD/MM/AAAA HH:MM">
+          <div class="help">Obligatorio en viaje normal: España -> extranjero</div>
+        </div>
+        <div class="field" data-field="frontera_retorno">
+          <label for="frontera_retorno">2o paso de frontera</label>
+          <input id="frontera_retorno" autocomplete="off" placeholder="DD/MM/AAAA HH:MM">
+          <div class="help">Obligatorio salvo cierre dia 24: extranjero -> España</div>
+        </div>
+      </div>
+
+      <div class="monthly">
+        <label class="check-row">
+          <input id="continuacion_cierre" type="checkbox">
+          <span>Continuacion tras cierre: el viaje empieza en un pais conocido y las fronteras son opcionales</span>
+        </label>
+        <div class="monthly-note">
+          Usalo para el resto del viaje despues del dia 24. Si cruza frontera, informa el primer y segundo paso.
+        </div>
+        <div class="country-options">
+          <label><input type="radio" name="pais_inicio" value="espana" checked> Empieza en España</label>
+          <label><input type="radio" name="pais_inicio" value="extranjero"> Empieza en Extranjero</label>
+        </div>
+      </div>
+
+      <div class="monthly">
+        <label class="check-row">
+          <input id="cierre_24" type="checkbox">
+          <span>Cierre mensual dia 24: pagar pernocta aunque el viaje cierre antes de medianoche</span>
+        </label>
+        <div class="monthly-note">
+          Usalo solo cuando el viaje se cierra el dia 24 y el conductor sigue de viaje.
+          Con esta opcion activa, Frontera retorno puede quedar vacio si aun no ha vuelto.
+        </div>
+        <div class="grid">
+          <div class="field" data-field="fin_viaje_24">
+            <label for="fin_viaje_24">Fecha cierre dia 24</label>
+            <input id="fin_viaje_24" autocomplete="off" placeholder="DD/MM/AAAA" disabled>
+            <div class="help">Solo se usa con el check de cierre mensual</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="secondary" type="button" id="limpiar">Limpiar</button>
+        <button class="primary" type="button" id="calcular">Calcular dietas</button>
+      </div>
+    </main>
+
+    <div class="status">
+      <span id="status">Listo para introducir datos.</span>
+      <strong>v1.5 HTML</strong>
+    </div>
+  </div>
+
+  <dialog id="messageDialog">
+    <div id="messageBar" class="modal-bar"></div>
+    <div class="modal-body">
+      <h2 id="messageTitle"></h2>
+      <div id="messageContent"></div>
+      <div class="modal-actions">
+        <button class="secondary" type="button" id="messageClose">Aceptar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="resultDialog">
+    <div class="modal-body">
+      <div class="result-head">
+        <h2 id="resultTotal"></h2>
+        <p id="resultDates"></p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Concepto</th>
+            <th>España</th>
+            <th>Extranjero</th>
+          </tr>
+        </thead>
+        <tbody id="resultRows"></tbody>
+      </table>
+      <div id="resultNote" class="note"></div>
+      <div class="modal-actions">
+        <button class="secondary" type="button" id="copyResult">Copiar resumen</button>
+        <button class="primary" type="button" id="closeResult">Cerrar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    const mealRows = [
+      ["Desayunos", 0],
+      ["Comidas", 1],
+      ["Cenas", 2],
+      ["Pernoctas", 3],
+    ];
+
+    const timeRanges = [
+      [[6, 0], [8, 0], 0],
+      [[14, 0], [16, 0], 1],
+      [[21, 0], [23, 0], 2],
+    ];
+
+    const fieldLabels = {
+      km_salida: "Kms. salida",
+      km_llegada: "Kms. llegada",
+      viaje_salida: "Viaje salida",
+      viaje_llegada: "Viaje llegada",
+      frontera_salida: "1er paso de frontera",
+      frontera_retorno: "2o paso de frontera",
+      fin_viaje_24: "Fecha cierre dia 24",
+    };
+
+    const fieldHelp = {
+      km_salida: "Kilometros al salir. Ej: 120000",
+      km_llegada: "Kilometros al llegar. Ej: 120850",
+      viaje_salida: "Formato: DD/MM/AAAA HH:MM",
+      viaje_llegada: "Debe ser posterior a la salida",
+      frontera_salida: "Obligatorio en viaje normal: España -> extranjero",
+      frontera_retorno: "Obligatorio salvo cierre dia 24: extranjero -> España",
+      fin_viaje_24: "Solo se usa con el check de cierre mensual",
+    };
+
+    const ids = Object.keys(fieldLabels);
+    const fields = Object.fromEntries(ids.map((id) => [id, document.getElementById(id)]));
+    const cierre24 = document.getElementById("cierre_24");
+    const continuacionCierre = document.getElementById("continuacion_cierre");
+    const paisInicioRadios = Array.from(document.querySelectorAll('input[name="pais_inicio"]'));
+    const statusEl = document.getElementById("status");
+    let lastSummary = "";
+
+    function setStatus(text) {
+      statusEl.textContent = text;
+    }
+
+    function fieldWrapper(id) {
+      return document.querySelector(`[data-field="${id}"]`);
+    }
+
+    function clearErrors() {
+      ids.forEach((id) => {
+        const wrapper = fieldWrapper(id);
+        wrapper.classList.remove("error");
+        wrapper.querySelector(".help").textContent = fieldHelp[id];
+      });
+      if (cierre24.checked) {
+        fieldWrapper("fin_viaje_24").querySelector(".help").textContent =
+          "Fecha del cierre. Debe ser dia 24 y coincidir con Viaje llegada.";
+      }
+      if (continuacionCierre.checked) {
+        ["frontera_salida", "frontera_retorno"].forEach((id) => {
+          fieldWrapper(id).querySelector(".help").textContent = "Opcional: cambia al pais contrario al pais actual.";
+        });
+      }
+    }
+
+    function addError(errors, id, message) {
+      if (!errors[id]) {
+        errors[id] = message;
+      }
+    }
+
+    function showErrors(errors) {
+      const messages = [];
+      Object.entries(errors).forEach(([id, message]) => {
+        const wrapper = fieldWrapper(id);
+        wrapper.classList.add("error");
+        wrapper.querySelector(".help").textContent = message;
+        messages.push(message);
+      });
+
+      const first = Object.keys(errors)[0];
+      if (first) {
+        fields[first].focus();
+        fields[first].select();
+      }
+
+      setStatus(`Revisa ${Object.keys(errors).length} campo(s) marcado(s) en rojo.`);
+      showMessage("Revisa los datos", messages, true);
+    }
+
+    function parseNumber(value) {
+      let clean = value.trim().replace(/\s+/g, "");
+      if (!clean) throw new Error("empty");
+
+      if (clean.includes(",") && clean.includes(".")) {
+        if (clean.lastIndexOf(",") > clean.lastIndexOf(".")) {
+          clean = clean.replace(/\./g, "").replace(",", ".");
+        } else {
+          clean = clean.replace(/,/g, "");
+        }
+      } else if (clean.includes(",")) {
+        clean = clean.replace(",", ".");
+      } else if (clean.includes(".")) {
+        const parts = clean.split(".");
+        if (parts.length > 1 && parts.slice(1).every((part) => part.length === 3)) {
+          clean = parts.join("");
+        }
+      }
+
+      const parsed = Number(clean);
+      if (!Number.isFinite(parsed)) throw new Error("invalid");
+      return parsed;
+    }
+
+    function parseDateTime(value) {
+      const clean = value.trim().replace(/\s+/g, " ");
+      const match = clean.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{2}|\d{4})\s+(\d{1,2}):(\d{2})$/);
+      if (!match) throw new Error("invalid date");
+      return makeDate(match[1], match[2], match[3], match[4], match[5]);
+    }
+
+    function parseCloseDate(value) {
+      const clean = value.trim().replace(/\s+/g, " ");
+      const dateOnly = clean.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{2}|\d{4})$/);
+      if (dateOnly) return makeDate(dateOnly[1], dateOnly[2], dateOnly[3], 0, 0);
+      return parseDateTime(clean);
+    }
+
+    function makeDate(dayText, monthText, yearText, hourText, minuteText) {
+      const day = Number(dayText);
+      const month = Number(monthText);
+      let year = Number(yearText);
+      const hour = Number(hourText);
+      const minute = Number(minuteText);
+      if (year < 100) year += 2000;
+
+      const date = new Date(year, month - 1, day, hour, minute, 0, 0);
+      if (
+        date.getFullYear() !== year ||
+        date.getMonth() !== month - 1 ||
+        date.getDate() !== day ||
+        date.getHours() !== hour ||
+        date.getMinutes() !== minute
+      ) {
+        throw new Error("invalid date");
+      }
+      return date;
+    }
+
+    function dateOnlyKey(date) {
+      return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    }
+
+    function combineDateAndTime(date, hour, minute, second = 0) {
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, second, 0);
+    }
+
+    function formatDate(date) {
+      return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function formatShortDate(date) {
+      return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}`;
+    }
+
+    function pad(value) {
+      return String(value).padStart(2, "0");
+    }
+
+    function formatKm(value) {
+      return Number.isInteger(value) ? String(value) : value.toFixed(1).replace(".", ",");
+    }
+
+    function oppositeCountry(country) {
+      return country === "espana" ? "extranjero" : "espana";
+    }
+
+    function borderEvents(data) {
+      let country = data.pais_inicio;
+      const events = [];
+      [data.frontera_salida, data.frontera_retorno].forEach((moment) => {
+        if (!moment) return;
+        const before = country;
+        country = oppositeCountry(country);
+        events.push({ moment, before, after: country });
+      });
+      return events;
+    }
+
+    function countryAt(data, moment) {
+      let country = data.pais_inicio;
+      borderEvents(data).forEach((event) => {
+        if (moment >= event.moment) country = event.after;
+      });
+      return country;
+    }
+
+    function isAbroad(data, moment) {
+      return countryAt(data, moment) === "extranjero";
+    }
+
+    function addOvernight(data, moment, espana, extranjero) {
+      if (isAbroad(data, moment)) {
+        extranjero[3] += 1;
+      } else {
+        espana[3] += 1;
+      }
+    }
+
+    function addCountryMeal(country, index, espana, extranjero) {
+      if (country === "extranjero") {
+        extranjero[index] += 1;
+      } else {
+        espana[index] += 1;
+      }
+    }
+
+    function addBorderMeal(data, start, end, index, espana, extranjero) {
+      for (const event of borderEvents(data)) {
+        if (event.moment >= start && event.moment <= end) {
+          addCountryMeal(sameMoment(event.moment, start) ? event.after : event.before, index, espana, extranjero);
+          return;
+        }
+      }
+
+      const control = new Date(start.getTime() + (end.getTime() - start.getTime()) / 2);
+      addCountryMeal(countryAt(data, control), index, espana, extranjero);
+    }
+
+    function sameMoment(first, second) {
+      return first && second && first.getTime() === second.getTime();
+    }
+
+    function calculateAllowances(data) {
+      const espana = [0, 0, 0, 0];
+      const extranjero = [0, 0, 0, 0];
+      const closeDayKey = data.fin_viaje_24 ? dateOnlyKey(data.fin_viaje_24) : null;
+
+      let day = new Date(
+        data.viaje_salida.getFullYear(),
+        data.viaje_salida.getMonth(),
+        data.viaje_salida.getDate(),
+      );
+      const lastDay = new Date(
+        data.viaje_llegada.getFullYear(),
+        data.viaje_llegada.getMonth(),
+        data.viaje_llegada.getDate(),
+      );
+
+      while (day <= lastDay) {
+        timeRanges.forEach((range) => {
+          const start = combineDateAndTime(day, range[0][0], range[0][1]);
+          const end = combineDateAndTime(day, range[1][0], range[1][1]);
+          const index = range[2];
+
+          if (data.viaje_llegada < start || data.viaje_salida > end) return;
+
+          addBorderMeal(data, start, end, index, espana, extranjero);
+        });
+
+        const overnight = combineDateAndTime(day, 23, 59, 59);
+        if (dateOnlyKey(day) !== closeDayKey && data.viaje_salida <= overnight && overnight < data.viaje_llegada) {
+          addOvernight(data, overnight, espana, extranjero);
+        }
+
+        day.setDate(day.getDate() + 1);
+      }
+
+      if (data.fin_viaje_24) {
+        addOvernight(data, combineDateAndTime(data.fin_viaje_24, 23, 59, 59), espana, extranjero);
+      }
+
+      return { espana, extranjero };
+    }
+
+    function validate() {
+      clearErrors();
+      const errors = {};
+      const values = Object.fromEntries(ids.map((id) => [id, fields[id].value.trim()]));
+      const continuacionActiva = continuacionCierre.checked;
+      const paisInicio = continuacionActiva
+        ? document.querySelector('input[name="pais_inicio"]:checked').value
+        : "espana";
+
+      ["km_salida", "km_llegada", "viaje_salida", "viaje_llegada"].forEach((id) => {
+        if (!values[id]) addError(errors, id, `Falta ${fieldLabels[id]}.`);
+      });
+
+      if (!continuacionActiva && !values.frontera_salida) {
+        addError(errors, "frontera_salida", "Falta el 1er paso de frontera.");
+      }
+
+      if (!values.frontera_retorno && !cierre24.checked && !continuacionActiva) {
+        addError(errors, "frontera_retorno", "Falta el 2o paso de frontera. Si el viaje sigue fuera, activa el cierre mensual dia 24.");
+      }
+      if (cierre24.checked && !values.fin_viaje_24) {
+        addError(errors, "fin_viaje_24", "Falta la fecha de cierre del dia 24.");
+      }
+
+      const data = {};
+      if (values.km_salida) {
+        try { data.km_salida = parseNumber(values.km_salida); }
+        catch { addError(errors, "km_salida", "Kms. salida debe ser un numero valido."); }
+      }
+      if (values.km_llegada) {
+        try { data.km_llegada = parseNumber(values.km_llegada); }
+        catch { addError(errors, "km_llegada", "Kms. llegada debe ser un numero valido."); }
+      }
+
+      ["viaje_salida", "viaje_llegada"].forEach((id) => {
+        if (values[id]) {
+          try { data[id] = parseDateTime(values[id]); }
+          catch { addError(errors, id, `${fieldLabels[id]} debe tener formato DD/MM/AAAA HH:MM.`); }
+        }
+      });
+
+      if (values.frontera_salida) {
+        try { data.frontera_salida = parseDateTime(values.frontera_salida); }
+        catch { addError(errors, "frontera_salida", "1er paso de frontera debe tener formato DD/MM/AAAA HH:MM."); }
+      } else {
+        data.frontera_salida = null;
+      }
+
+      if (values.frontera_retorno) {
+        try { data.frontera_retorno = parseDateTime(values.frontera_retorno); }
+        catch { addError(errors, "frontera_retorno", "2o paso de frontera debe tener formato DD/MM/AAAA HH:MM."); }
+      } else {
+        data.frontera_retorno = null;
+      }
+
+      if (cierre24.checked && values.fin_viaje_24) {
+        try { data.fin_viaje_24 = parseCloseDate(values.fin_viaje_24); }
+        catch { addError(errors, "fin_viaje_24", "Fecha cierre dia 24 debe tener formato DD/MM/AAAA o DD/MM/AAAA HH:MM."); }
+      } else {
+        data.fin_viaje_24 = null;
+      }
+
+      if (data.km_salida !== undefined && data.km_llegada !== undefined) {
+        if (data.km_salida < 0) addError(errors, "km_salida", "Los kilometros de salida no pueden ser negativos.");
+        if (data.km_llegada < 0) addError(errors, "km_llegada", "Los kilometros de llegada no pueden ser negativos.");
+        if (data.km_salida >= 0 && data.km_llegada >= 0 && data.km_llegada < data.km_salida) {
+          addError(errors, "km_llegada", "Kms. llegada no puede ser menor que Kms. salida.");
+        }
+      }
+
+      if (data.viaje_salida && data.viaje_llegada && data.viaje_llegada <= data.viaje_salida) {
+        addError(errors, "viaje_llegada", "Viaje llegada debe ser posterior a Viaje salida.");
+      }
+
+      if (data.viaje_salida && data.viaje_llegada && data.frontera_salida) {
+        if (data.frontera_salida < data.viaje_salida || data.frontera_salida > data.viaje_llegada) {
+          addError(errors, "frontera_salida", "1er paso de frontera debe estar dentro del viaje.");
+        }
+      }
+
+      if (!data.frontera_salida && data.frontera_retorno) {
+        addError(errors, "frontera_salida", "Informa el 1er paso antes del 2o paso de frontera.");
+      }
+
+      if (data.frontera_salida && data.frontera_retorno && data.frontera_retorno < data.frontera_salida) {
+        addError(errors, "frontera_retorno", "2o paso de frontera no puede ser anterior al 1er paso.");
+      }
+
+      if (data.viaje_salida && data.viaje_llegada && data.frontera_retorno) {
+        if (data.frontera_retorno < data.viaje_salida || data.frontera_retorno > data.viaje_llegada) {
+          addError(errors, "frontera_retorno", "2o paso de frontera debe estar dentro del viaje.");
+        }
+      }
+
+      if (cierre24.checked && data.fin_viaje_24) {
+        if (data.fin_viaje_24.getDate() !== 24) {
+          addError(errors, "fin_viaje_24", "La fecha de cierre mensual debe ser dia 24.");
+        }
+        if (data.viaje_llegada && dateOnlyKey(data.fin_viaje_24) !== dateOnlyKey(data.viaje_llegada)) {
+          addError(errors, "fin_viaje_24", "La fecha de cierre debe coincidir con la fecha de Viaje llegada.");
+        }
+      }
+
+      if (Object.keys(errors).length) {
+        showErrors(errors);
+        return null;
+      }
+
+      data.continuacion_cierre = continuacionActiva;
+      data.pais_inicio = paisInicio;
+      return data;
+    }
+
+    function showMessage(title, messages, isError = false) {
+      document.getElementById("messageTitle").textContent = title;
+      const content = document.getElementById("messageContent");
+      if (Array.isArray(messages)) {
+        content.innerHTML = `<ul class="error-list">${messages.map((msg) => `<li>${escapeHtml(msg)}</li>`).join("")}</ul>`;
+      } else {
+        content.textContent = messages;
+      }
+      document.getElementById("messageBar").classList.toggle("error", isError);
+      document.getElementById("messageDialog").showModal();
+    }
+
+    function escapeHtml(text) {
+      return String(text).replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;",
+      }[char]));
+    }
+
+    function showResults(data, result) {
+      const totalKm = data.km_llegada - data.km_salida;
+      document.getElementById("resultTotal").textContent = `TOTAL: ${formatKm(totalKm)} KM`;
+      document.getElementById("resultDates").textContent = `${formatDate(data.viaje_salida)} > ${formatDate(data.viaje_llegada)}`;
+
+      const rows = document.getElementById("resultRows");
+      rows.innerHTML = "";
+      mealRows.forEach(([label, index]) => {
+        const es = result.espana[index];
+        const ex = result.extranjero[index];
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${label}</td><td>${es}</td><td>${ex}</td>`;
+        rows.appendChild(tr);
+      });
+
+      const note = document.getElementById("resultNote");
+      const notes = [];
+      if (data.fin_viaje_24) {
+        notes.push("Incluye siempre la pernocta del cierre mensual dia 24. Se paga en el pais donde este a las 23:59:59.");
+      }
+      if (data.continuacion_cierre) {
+        const pais = data.pais_inicio === "extranjero" ? "Extranjero" : "España";
+        notes.push(`Continuacion tras cierre: el viaje empieza en ${pais}; los pasos de frontera informados son opcionales.`);
+      }
+      note.textContent = notes.join(" ");
+
+      lastSummary = buildSummary(totalKm, data, result);
+      document.getElementById("resultDialog").showModal();
+    }
+
+    function buildSummary(totalKm, data, result) {
+      const lines = [
+        `Total: ${formatKm(totalKm)} KM`,
+        `Viaje salida: ${formatDate(data.viaje_salida)}`,
+        `Viaje llegada: ${formatDate(data.viaje_llegada)}`,
+        "",
+        "ESPAÑA",
+        `Desayunos: ${result.espana[0]}`,
+        `Comidas: ${result.espana[1]}`,
+        `Cenas: ${result.espana[2]}`,
+        `Pernoctas: ${result.espana[3]}`,
+        "",
+        "EXTRANJERO",
+        `Desayunos: ${result.extranjero[0]}`,
+        `Comidas: ${result.extranjero[1]}`,
+        `Cenas: ${result.extranjero[2]}`,
+        `Pernoctas: ${result.extranjero[3]}`,
+      ];
+
+      if (data.fin_viaje_24) {
+        lines.push("", `Cierre mensual dia 24: ${formatShortDate(data.fin_viaje_24)}`, "Incluye siempre la pernocta del dia 24 segun pais a las 23:59:59.");
+      }
+      if (data.continuacion_cierre) {
+        const pais = data.pais_inicio === "extranjero" ? "Extranjero" : "España";
+        lines.push("", `Continuacion tras cierre: empieza en ${pais}.`);
+      }
+      return lines.join("\n");
+    }
+
+    function updateContinuacionCierre() {
+      const active = continuacionCierre.checked;
+      paisInicioRadios.forEach((radio) => {
+        radio.disabled = !active;
+      });
+
+      ["frontera_salida", "frontera_retorno"].forEach((id) => {
+        if (active) {
+          fieldWrapper(id).classList.remove("error");
+          fieldWrapper(id).querySelector(".help").textContent = "Opcional: cambia al pais contrario al pais actual.";
+        } else {
+          fieldWrapper(id).querySelector(".help").textContent = fieldHelp[id];
+        }
+      });
+
+      if (active) {
+        const pais = document.querySelector('input[name="pais_inicio"]:checked').value === "extranjero" ? "Extranjero" : "España";
+        setStatus(`Continuacion activa: el viaje empieza en ${pais}. Fronteras opcionales.`);
+      } else {
+        document.querySelector('input[name="pais_inicio"][value="espana"]').checked = true;
+        setStatus("Viaje normal: empieza en España y requiere pasos de frontera.");
+      }
+    }
+
+    continuacionCierre.addEventListener("change", () => {
+      updateContinuacionCierre();
+      clearErrors();
+      updateContinuacionCierre();
+    });
+
+    paisInicioRadios.forEach((radio) => {
+      radio.addEventListener("change", () => {
+        if (continuacionCierre.checked) updateContinuacionCierre();
+      });
+    });
+
+    cierre24.addEventListener("change", () => {
+      fields.fin_viaje_24.disabled = !cierre24.checked;
+      if (cierre24.checked) {
+        fieldWrapper("fin_viaje_24").querySelector(".help").textContent =
+          "Fecha del cierre. Debe ser dia 24 y coincidir con Viaje llegada.";
+        if (!fields.fin_viaje_24.value.trim()) {
+          try {
+            const llegada = parseDateTime(fields.viaje_llegada.value);
+            if (llegada.getDate() === 24) fields.fin_viaje_24.value = formatShortDate(llegada);
+          } catch {}
+        }
+        setStatus("Cierre dia 24 activo: Frontera retorno puede quedar vacio.");
+      } else {
+        fields.fin_viaje_24.value = "";
+        clearErrors();
+        setStatus("Cierre dia 24 desactivado.");
+      }
+    });
+
+    document.getElementById("calcular").addEventListener("click", () => {
+      const data = validate();
+      if (!data) return;
+      const result = calculateAllowances(data);
+      setStatus("Calculo completado correctamente.");
+      showResults(data, result);
+    });
+
+    document.getElementById("limpiar").addEventListener("click", () => {
+      ids.forEach((id) => {
+        fields[id].disabled = false;
+        fields[id].value = "";
+      });
+      cierre24.checked = false;
+      continuacionCierre.checked = false;
+      document.querySelector('input[name="pais_inicio"][value="espana"]').checked = true;
+      fields.fin_viaje_24.disabled = true;
+      clearErrors();
+      updateContinuacionCierre();
+      fields.fin_viaje_24.disabled = true;
+      fields.km_salida.focus();
+      setStatus("Formulario limpio.");
+    });
+
+    document.getElementById("messageClose").addEventListener("click", () => {
+      document.getElementById("messageDialog").close();
+    });
+
+    document.getElementById("closeResult").addEventListener("click", () => {
+      document.getElementById("resultDialog").close();
+    });
+
+    document.getElementById("copyResult").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(lastSummary);
+        setStatus("Resumen copiado al portapapeles.");
+        showMessage("Copiado", "El resumen se ha copiado al portapapeles.");
+      } catch {
+        showMessage("No se pudo copiar", "Selecciona el texto del resultado manualmente si el navegador bloquea el portapapeles.", true);
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !document.querySelector("dialog[open]")) {
+        document.getElementById("calcular").click();
+      }
+    });
+
+    updateContinuacionCierre();
+  </script>
+</body>
+</html>
