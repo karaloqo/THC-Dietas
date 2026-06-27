@@ -317,21 +317,21 @@
   <div class="app">
     <header>
       <h1>Calculadora de Dietas</h1>
-      <p>Calculo manual de kilometros, dietas y pernoctas</p>
+      <p>Cálculo manual de kilómetros, dietas y pernoctas</p>
     </header>
 
     <main>
-      <div class="section-title">1. Kilometros</div>
+      <div class="section-title">1. Kilómetros</div>
       <div class="grid">
         <div class="field" data-field="km_salida">
           <label for="km_salida">Kms. salida</label>
           <input id="km_salida" autocomplete="off" inputmode="decimal">
-          <div class="help">Kilometros al salir. Ej: 120000</div>
+          <div class="help">Kilómetros al salir. Ej: 120000</div>
         </div>
         <div class="field" data-field="km_llegada">
           <label for="km_llegada">Kms. llegada</label>
           <input id="km_llegada" autocomplete="off" inputmode="decimal">
-          <div class="help">Kilometros al llegar. Ej: 120850</div>
+          <div class="help">Kilómetros al llegar. Ej: 120850</div>
         </div>
       </div>
 
@@ -359,36 +359,36 @@
         <div class="field" data-field="frontera_retorno">
           <label for="frontera_retorno">Paso Extranjero -> España</label>
           <input id="frontera_retorno" autocomplete="off" placeholder="DD/MM/AAAA HH:MM">
-          <div class="help">Obligatorio salvo cierre dia 24: extranjero -> España</div>
+          <div class="help">Obligatorio salvo cierre día 24: extranjero -> España</div>
         </div>
       </div>
 
       <div class="monthly">
         <label class="check-row">
           <input id="continuacion_cierre" type="checkbox">
-          <span>Continuacion tras cierre: el viaje empieza en un pais conocido y las fronteras son opcionales</span>
+          <span>Continuación tras cierre: el viaje empieza en un país conocido y las fronteras son opcionales</span>
         </label>
         <div class="monthly-note">
-          Usalo para el resto del viaje despues del dia 24. Si cruza frontera, informa el primer y segundo paso.
+          Úsalo para el resto del viaje después del día 24. Si cruza frontera, informa el paso que corresponda.
         </div>
         <div class="country-options">
           <label><input type="radio" name="pais_inicio" value="espana" checked> Empieza en España</label>
-          <label><input type="radio" name="pais_inicio" value="extranjero"> Empieza en Extranjero</label>
+          <label><input type="radio" name="pais_inicio" value="extranjero"> Empieza en el extranjero</label>
         </div>
       </div>
 
       <div class="monthly">
         <label class="check-row">
           <input id="cierre_24" type="checkbox">
-          <span>Cierre mensual dia 24: pagar pernocta aunque el viaje cierre antes de medianoche</span>
+          <span>Cierre mensual día 24: pagar pernocta aunque el viaje cierre antes de medianoche</span>
         </label>
         <div class="monthly-note">
-          Usalo solo cuando el viaje se cierra el dia 24 y el conductor sigue de viaje.
-          Con esta opcion activa, el paso Extranjero -> España puede quedar vacio si aun no ha vuelto.
+          Úsalo solo cuando el viaje se cierra el día 24 y el conductor sigue de viaje.
+          Con esta opción activa, los pasos de frontera pueden quedar vacíos si aún no ha vuelto.
         </div>
         <div class="grid">
           <div class="field" data-field="fin_viaje_24">
-            <label for="fin_viaje_24">Fecha cierre dia 24</label>
+            <label for="fin_viaje_24">Fecha cierre día 24</label>
             <input id="fin_viaje_24" autocomplete="off" placeholder="DD/MM/AAAA" disabled>
             <div class="help">Solo se usa con el check de cierre mensual</div>
           </div>
@@ -403,7 +403,7 @@
 
     <div class="status">
       <span id="status">Listo para introducir datos.</span>
-      <strong>v1.6 HTML</strong>
+      <strong>v1.8 HTML</strong>
     </div>
   </div>
 
@@ -463,16 +463,16 @@
       viaje_llegada: "Viaje llegada",
       frontera_salida: "Paso España -> Extranjero",
       frontera_retorno: "Paso Extranjero -> España",
-      fin_viaje_24: "Fecha cierre dia 24",
+      fin_viaje_24: "Fecha cierre día 24",
     };
 
     const fieldHelp = {
-      km_salida: "Kilometros al salir. Ej: 120000",
-      km_llegada: "Kilometros al llegar. Ej: 120850",
+      km_salida: "Kilómetros al salir. Ej: 120000",
+      km_llegada: "Kilómetros al llegar. Ej: 120850",
       viaje_salida: "Formato: DD/MM/AAAA HH:MM",
       viaje_llegada: "Debe ser posterior a la salida",
       frontera_salida: "Obligatorio en viaje normal: España -> extranjero",
-      frontera_retorno: "Obligatorio salvo cierre dia 24: extranjero -> España",
+      frontera_retorno: "Obligatorio salvo cierre día 24: extranjero -> España",
       fin_viaje_24: "Solo se usa con el check de cierre mensual",
     };
 
@@ -500,7 +500,7 @@
       });
       if (cierre24.checked) {
         fieldWrapper("fin_viaje_24").querySelector(".help").textContent =
-          "Fecha del cierre. Debe ser dia 24 y coincidir con Viaje llegada.";
+          "Fecha del cierre. Debe ser día 24 y coincidir con Viaje llegada.";
       }
       if (continuacionCierre.checked) {
         ["frontera_salida", "frontera_retorno"].forEach((id) => {
@@ -732,25 +732,25 @@
         if (!values[id]) addError(errors, id, `Falta ${fieldLabels[id]}.`);
       });
 
-      if (!continuacionActiva && !values.frontera_salida) {
+      if (!continuacionActiva && !cierre24.checked && !values.frontera_salida) {
         addError(errors, "frontera_salida", "Falta el paso España -> Extranjero.");
       }
 
       if (!values.frontera_retorno && !cierre24.checked && !continuacionActiva) {
-        addError(errors, "frontera_retorno", "Falta el paso Extranjero -> España. Si el viaje sigue fuera, activa el cierre mensual dia 24.");
+        addError(errors, "frontera_retorno", "Falta el paso Extranjero -> España. Si el viaje sigue fuera, activa el cierre mensual día 24.");
       }
       if (cierre24.checked && !values.fin_viaje_24) {
-        addError(errors, "fin_viaje_24", "Falta la fecha de cierre del dia 24.");
+        addError(errors, "fin_viaje_24", "Falta la fecha de cierre del día 24.");
       }
 
       const data = {};
       if (values.km_salida) {
         try { data.km_salida = parseNumber(values.km_salida); }
-        catch { addError(errors, "km_salida", "Kms. salida debe ser un numero valido."); }
+        catch { addError(errors, "km_salida", "Kms. salida debe ser un número válido."); }
       }
       if (values.km_llegada) {
         try { data.km_llegada = parseNumber(values.km_llegada); }
-        catch { addError(errors, "km_llegada", "Kms. llegada debe ser un numero valido."); }
+        catch { addError(errors, "km_llegada", "Kms. llegada debe ser un número válido."); }
       }
 
       ["viaje_salida", "viaje_llegada"].forEach((id) => {
@@ -776,14 +776,14 @@
 
       if (cierre24.checked && values.fin_viaje_24) {
         try { data.fin_viaje_24 = parseCloseDate(values.fin_viaje_24); }
-        catch { addError(errors, "fin_viaje_24", "Fecha cierre dia 24 debe tener formato DD/MM/AAAA o DD/MM/AAAA HH:MM."); }
+        catch { addError(errors, "fin_viaje_24", "Fecha cierre día 24 debe tener formato DD/MM/AAAA o DD/MM/AAAA HH:MM."); }
       } else {
         data.fin_viaje_24 = null;
       }
 
       if (data.km_salida !== undefined && data.km_llegada !== undefined) {
-        if (data.km_salida < 0) addError(errors, "km_salida", "Los kilometros de salida no pueden ser negativos.");
-        if (data.km_llegada < 0) addError(errors, "km_llegada", "Los kilometros de llegada no pueden ser negativos.");
+        if (data.km_salida < 0) addError(errors, "km_salida", "Los kilómetros de salida no pueden ser negativos.");
+        if (data.km_llegada < 0) addError(errors, "km_llegada", "Los kilómetros de llegada no pueden ser negativos.");
         if (data.km_salida >= 0 && data.km_llegada >= 0 && data.km_llegada < data.km_salida) {
           addError(errors, "km_llegada", "Kms. llegada no puede ser menor que Kms. salida.");
         }
@@ -810,21 +810,21 @@
           addError(errors, "frontera_retorno", "El paso Extranjero -> España no puede ser anterior al paso España -> Extranjero.");
         }
         if (paisInicio === "extranjero" && data.frontera_salida < data.frontera_retorno) {
-          addError(errors, "frontera_salida", "El paso España -> Extranjero no puede ser anterior al paso Extranjero -> España si empieza en extranjero.");
+          addError(errors, "frontera_salida", "El paso España -> Extranjero no puede ser anterior al paso Extranjero -> España si empieza en el extranjero.");
         }
       }
 
       if (continuacionActiva && paisInicio === "espana" && !data.frontera_salida && data.frontera_retorno) {
-        addError(errors, "frontera_salida", "Si empieza en España, informa primero el paso España -> Extranjero o cambia el inicio a Extranjero.");
+        addError(errors, "frontera_salida", "Si empieza en España, informa primero el paso España -> Extranjero o marca que empieza en el extranjero.");
       }
 
       if (continuacionActiva && paisInicio === "extranjero" && !data.frontera_retorno && data.frontera_salida) {
-        addError(errors, "frontera_retorno", "Si empieza en extranjero, informa primero el paso Extranjero -> España o cambia el inicio a España.");
+        addError(errors, "frontera_retorno", "Si empieza en el extranjero, informa primero el paso Extranjero -> España o marca que empieza en España.");
       }
 
       if (cierre24.checked && data.fin_viaje_24) {
         if (data.fin_viaje_24.getDate() !== 24) {
-          addError(errors, "fin_viaje_24", "La fecha de cierre mensual debe ser dia 24.");
+          addError(errors, "fin_viaje_24", "La fecha de cierre mensual debe ser día 24.");
         }
         if (data.viaje_llegada && dateOnlyKey(data.fin_viaje_24) !== dateOnlyKey(data.viaje_llegada)) {
           addError(errors, "fin_viaje_24", "La fecha de cierre debe coincidir con la fecha de Viaje llegada.");
@@ -881,11 +881,11 @@
       const note = document.getElementById("resultNote");
       const notes = [];
       if (data.fin_viaje_24) {
-        notes.push("Incluye siempre la pernocta del cierre mensual dia 24. Se paga en el pais donde este a las 23:59:59.");
+        notes.push("Incluye siempre la pernocta del cierre mensual día 24. Se paga en el país donde esté a las 23:59:59.");
       }
       if (data.continuacion_cierre) {
-        const pais = data.pais_inicio === "extranjero" ? "Extranjero" : "España";
-        notes.push(`Continuacion tras cierre: el viaje empieza en ${pais}; los pasos de frontera informados son opcionales.`);
+        const pais = data.pais_inicio === "extranjero" ? "el extranjero" : "España";
+        notes.push(`Continuación tras cierre: el viaje empieza en ${pais}; los pasos de frontera informados son opcionales.`);
       }
       note.textContent = notes.join(" ");
 
@@ -913,11 +913,11 @@
       ];
 
       if (data.fin_viaje_24) {
-        lines.push("", `Cierre mensual dia 24: ${formatShortDate(data.fin_viaje_24)}`, "Incluye siempre la pernocta del dia 24 segun pais a las 23:59:59.");
+        lines.push("", `Cierre mensual día 24: ${formatShortDate(data.fin_viaje_24)}`, "Incluye siempre la pernocta del día 24 según país a las 23:59:59.");
       }
       if (data.continuacion_cierre) {
-        const pais = data.pais_inicio === "extranjero" ? "Extranjero" : "España";
-        lines.push("", `Continuacion tras cierre: empieza en ${pais}.`);
+        const pais = data.pais_inicio === "extranjero" ? "el extranjero" : "España";
+        lines.push("", `Continuación tras cierre: empieza en ${pais}.`);
       }
       return lines.join("\n");
     }
@@ -941,8 +941,8 @@
       });
 
       if (active) {
-        const pais = document.querySelector('input[name="pais_inicio"]:checked').value === "extranjero" ? "Extranjero" : "España";
-        setStatus(`Continuacion activa: el viaje empieza en ${pais}. Fronteras opcionales.`);
+        const pais = document.querySelector('input[name="pais_inicio"]:checked').value === "extranjero" ? "el extranjero" : "España";
+        setStatus(`Continuación activa: el viaje empieza en ${pais}. Fronteras opcionales.`);
       } else {
         document.querySelector('input[name="pais_inicio"][value="espana"]').checked = true;
         setStatus("Viaje normal: empieza en España y requiere pasos de frontera.");
@@ -965,18 +965,18 @@
       fields.fin_viaje_24.disabled = !cierre24.checked;
       if (cierre24.checked) {
         fieldWrapper("fin_viaje_24").querySelector(".help").textContent =
-          "Fecha del cierre. Debe ser dia 24 y coincidir con Viaje llegada.";
+          "Fecha del cierre. Debe ser día 24 y coincidir con Viaje llegada.";
         if (!fields.fin_viaje_24.value.trim()) {
           try {
             const llegada = parseDateTime(fields.viaje_llegada.value);
             if (llegada.getDate() === 24) fields.fin_viaje_24.value = formatShortDate(llegada);
           } catch {}
         }
-        setStatus("Cierre dia 24 activo: el paso Extranjero -> España puede quedar vacio.");
+        setStatus("Cierre día 24 activo: los pasos de frontera pueden quedar vacíos.");
       } else {
         fields.fin_viaje_24.value = "";
         clearErrors();
-        setStatus("Cierre dia 24 desactivado.");
+        setStatus("Cierre día 24 desactivado.");
       }
     });
 
@@ -984,7 +984,7 @@
       const data = validate();
       if (!data) return;
       const result = calculateAllowances(data);
-      setStatus("Calculo completado correctamente.");
+      setStatus("Cálculo completado correctamente.");
       showResults(data, result);
     });
 
