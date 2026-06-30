@@ -462,22 +462,70 @@
     }
 
     .check-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
       line-height: 1.35;
       font-weight: 700;
+      cursor: pointer;
+      user-select: none;
     }
 
     .check-row input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .switch-ui {
+      position: relative;
+      width: 46px;
+      height: 26px;
+      flex: 0 0 46px;
+      background: #cbd5e1;
+      border: 1px solid #b6c2d2;
+      border-radius: 999px;
+      transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .switch-ui::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
       width: 18px;
       height: 18px;
-      margin-top: 2px;
-      accent-color: var(--accent);
+      background: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(15, 23, 42, 0.22);
+      transition: transform 160ms ease;
+    }
+
+    .check-row input:checked + .switch-ui {
+      background: var(--accent);
+      border-color: var(--accent-dark);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+    }
+
+    .check-row input:checked + .switch-ui::after {
+      transform: translateX(20px);
+    }
+
+    .check-row input:focus-visible + .switch-ui {
+      outline: 3px solid rgba(37, 99, 235, 0.22);
+      outline-offset: 2px;
+    }
+
+    .check-row input:disabled + .switch-ui {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     .mode-note {
-      margin: 5px 0 0 28px;
+      margin: 6px 0 0 58px;
       color: var(--muted);
       font-size: 13px;
       line-height: 1.4;
@@ -487,7 +535,7 @@
       display: inline-grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 4px;
-      margin: 12px 0 0 28px;
+      margin: 12px 0 0 58px;
       padding: 4px;
       background: var(--surface-soft);
       border: 1px solid var(--line);
@@ -582,28 +630,70 @@
       background: var(--accent-dark);
     }
 
-    .result-head span {
-      display: block;
-      margin-bottom: 6px;
+    .result-head-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(230px, auto);
+      column-gap: 26px;
+      row-gap: 8px;
+      align-items: end;
+    }
+
+    .result-label {
+      grid-row: 1;
       color: #dbeafe;
       font-size: 12px;
       font-weight: 800;
       text-transform: uppercase;
     }
 
-    .result-head strong {
+    .result-label:not(.result-right) {
+      grid-column: 1;
+    }
+
+    .result-main-value {
       display: block;
       font-size: clamp(28px, 4vw, 42px);
       line-height: 1;
       letter-spacing: 0;
     }
 
-    .result-head p {
+    .result-right {
+      grid-column: 2;
+      text-align: right;
+    }
+
+    .result-right[hidden] {
+      display: none;
+    }
+
+    .result-detail {
       min-height: 18px;
-      margin: 8px 0 0;
-      color: #fee2e2;
+      margin: 0;
+      color: #dbeafe;
       font-size: 13px;
       line-height: 1.35;
+    }
+
+    #result_total {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    #result_dates {
+      grid-column: 1;
+      grid-row: 3;
+    }
+
+    #result_duration_label {
+      grid-row: 1;
+    }
+
+    #result_duration_value {
+      grid-row: 2;
+    }
+
+    #result_duration_detail {
+      grid-row: 3;
     }
 
     .result-body {
@@ -705,6 +795,29 @@
       vertical-align: middle;
     }
 
+    .daily-value {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .daily-value-on {
+      color: #ffffff;
+      background: var(--accent);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.22);
+    }
+
+    .daily-value-off {
+      color: #94a3b8;
+      background: transparent;
+      font-weight: 700;
+    }
+
     .daily-table td:first-child {
       text-align: left;
     }
@@ -765,13 +878,43 @@
         padding-inline: 14px;
       }
 
+      .result-head-grid {
+        grid-template-columns: 1fr;
+        row-gap: 8px;
+      }
+
+      .result-right {
+        grid-column: 1;
+        text-align: left;
+      }
+
+      #result_duration_label {
+        grid-row: 4;
+        margin-top: 6px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(219, 234, 254, 0.28);
+      }
+
+      #result_duration_value {
+        grid-row: 5;
+      }
+
+      #result_duration_detail {
+        grid-row: 6;
+      }
+
       .field-grid,
       .action-bar {
         grid-template-columns: 1fr;
       }
 
+      .mode-note,
       .segmented {
-        width: calc(100% - 28px);
+        margin-left: 0;
+      }
+
+      .segmented {
+        width: 100%;
       }
     }
   </style>
@@ -828,7 +971,7 @@
           <p>Cálculo de kilómetros, dietas y pernoctas por país</p>
         </div>
       </div>
-      <span class="version-pill" id="file_version">Versión v2.9</span>
+      <span class="version-pill" id="file_version">Versión v3.6</span>
     </header>
 
     <main class="workspace">
@@ -919,6 +1062,7 @@
               <div>
                 <label class="check-row">
                   <input id="continuacion_cierre" type="checkbox">
+                  <span class="switch-ui" aria-hidden="true"></span>
                   <span>Continuación tras cierre del día 24</span>
                 </label>
                 <div class="mode-note">Se abre siempre el día 25 de cada mes a las 00:00. El viaje nuevo empieza en un país conocido y los pasos de frontera son opcionales.</div>
@@ -931,6 +1075,7 @@
               <div>
                 <label class="check-row">
                   <input id="cierre_24" type="checkbox">
+                  <span class="switch-ui" aria-hidden="true"></span>
                   <span>Cierre mensual del día 24</span>
                 </label>
                 <div class="mode-note">El día 24 debe cerrarse siempre a las 23:59. La pernocta del día 24 se paga aunque el viaje cierre antes de medianoche.</div>
@@ -953,9 +1098,14 @@
 
       <aside class="result-panel" aria-label="Resultado">
         <div class="result-head">
-          <span>Resultado</span>
-          <strong id="result_total">-- KM</strong>
-          <p id="result_dates">Pendiente de cálculo.</p>
+          <div class="result-head-grid">
+            <span class="result-label">Resultado</span>
+            <span class="result-label result-right" id="result_duration_label" hidden>Duración del viaje</span>
+            <strong class="result-main-value" id="result_total">-- KM</strong>
+            <strong class="result-main-value result-right" id="result_duration_value" hidden>-- días</strong>
+            <p class="result-detail" id="result_dates">Pendiente de cálculo.</p>
+            <p class="result-detail result-right" id="result_duration_detail" hidden>España: -- · Extranjero: --</p>
+          </div>
         </div>
         <div class="result-body">
           <table class="result-table">
@@ -1074,7 +1224,7 @@
       frontera_retorno: "Obligatorio salvo cierre día 24.",
     };
 
-    const fileVersion = "v2.9";
+    const fileVersion = "v3.6";
     const monthNames = [
       "enero",
       "febrero",
@@ -1842,26 +1992,55 @@
       section.hidden = false;
     }
 
+    function dailyValueCell(value) {
+      const className = value > 0 ? "daily-value daily-value-on" : "daily-value daily-value-off";
+      return `<td><span class="${className}">${value}</span></td>`;
+    }
+
     function createDailyRow(day) {
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${formatShortDate(day.date)}</td>
-        <td>${day.espana[0]}</td>
-        <td>${day.espana[1]}</td>
-        <td>${day.espana[2]}</td>
-        <td>${day.espana[3]}</td>
-        <td>${day.extranjero[0]}</td>
-        <td>${day.extranjero[1]}</td>
-        <td>${day.extranjero[2]}</td>
-        <td>${day.extranjero[3]}</td>
+        ${dailyValueCell(day.espana[0])}
+        ${dailyValueCell(day.espana[1])}
+        ${dailyValueCell(day.espana[2])}
+        ${dailyValueCell(day.espana[3])}
+        ${dailyValueCell(day.extranjero[0])}
+        ${dailyValueCell(day.extranjero[1])}
+        ${dailyValueCell(day.extranjero[2])}
+        ${dailyValueCell(day.extranjero[3])}
       `;
       return tr;
+    }
+
+    function pluralDays(count) {
+      return count === 1 ? "día" : "días";
+    }
+
+    function countCountryDays(days, country) {
+      return days.filter((day) => day[country].some((value) => value > 0)).length;
+    }
+
+    function renderDurationSummary(result) {
+      const durationLabel = document.getElementById("result_duration_label");
+      const durationValue = document.getElementById("result_duration_value");
+      const durationDetail = document.getElementById("result_duration_detail");
+      const days = result.days || [];
+      const totalDays = days.length;
+      const espanaDays = countCountryDays(days, "espana");
+      const extranjeroDays = countCountryDays(days, "extranjero");
+      durationValue.textContent = `${totalDays} ${pluralDays(totalDays)}`;
+      durationDetail.textContent = `España: ${espanaDays} ${pluralDays(espanaDays)} · Extranjero: ${extranjeroDays} ${pluralDays(extranjeroDays)}`;
+      durationLabel.hidden = false;
+      durationValue.hidden = false;
+      durationDetail.hidden = false;
     }
 
     function showResults(data, result) {
       const totalKm = data.km_llegada - data.km_salida;
       document.getElementById("result_total").textContent = `${formatKm(totalKm)} KM`;
       document.getElementById("result_dates").textContent = `${formatDate(data.viaje_salida)} -> ${formatDate(data.viaje_llegada)}`;
+      renderDurationSummary(result);
       renderRows(result);
       renderDailyBreakdown(result.days);
 
@@ -1979,6 +2158,9 @@
       updateContinuacionCierre();
       document.getElementById("result_total").textContent = "-- KM";
       document.getElementById("result_dates").textContent = "Pendiente de cálculo.";
+      document.getElementById("result_duration_label").hidden = true;
+      document.getElementById("result_duration_value").hidden = true;
+      document.getElementById("result_duration_detail").hidden = true;
       document.getElementById("result_note").textContent = "Los resultados aparecerán aquí al calcular.";
       renderRows();
       renderDailyBreakdown();
