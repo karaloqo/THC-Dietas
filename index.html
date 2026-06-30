@@ -85,6 +85,12 @@
       border-radius: var(--radius);
     }
 
+    .brand-mark .icon {
+      width: 28px;
+      height: 28px;
+      stroke-width: 1.9;
+    }
+
     .brand h1 {
       margin: 0;
       font-size: clamp(22px, 2vw, 30px);
@@ -114,11 +120,11 @@
 
     .workspace {
       width: 100%;
-      max-width: 1680px;
+      max-width: 1760px;
       margin: 0 auto;
       padding: 18px;
       display: grid;
-      grid-template-columns: minmax(620px, 1fr) minmax(360px, 450px);
+      grid-template-columns: minmax(600px, 1.08fr) minmax(540px, 0.92fr);
       gap: 18px;
       align-items: start;
     }
@@ -664,14 +670,19 @@
 
     .daily-table {
       width: 100%;
-      min-width: 700px;
+      min-width: 560px;
       border-collapse: collapse;
-      font-size: 13px;
+      table-layout: fixed;
+      font-size: 12px;
+    }
+
+    .daily-col-day {
+      width: 96px;
     }
 
     .daily-table th,
     .daily-table td {
-      padding: 9px 8px;
+      padding: 8px 5px;
       border-bottom: 1px solid var(--line);
       text-align: center;
       white-space: nowrap;
@@ -680,8 +691,18 @@
     .daily-table th {
       color: #334155;
       background: var(--surface-soft);
-      font-size: 11px;
+      font-size: 10px;
       text-transform: uppercase;
+    }
+
+    .daily-table .daily-group-row th {
+      color: var(--accent-dark);
+      background: #eff6ff;
+      font-size: 11px;
+    }
+
+    .daily-table .daily-group-row th:first-child {
+      vertical-align: middle;
     }
 
     .daily-table td:first-child {
@@ -706,7 +727,7 @@
       stroke-width: 2;
     }
 
-    @media (max-width: 1120px) {
+    @media (max-width: 1160px) {
       .workspace {
         grid-template-columns: 1fr;
       }
@@ -786,10 +807,13 @@
       <path d="M21 12a9 9 0 0 1-15.5 6.2"></path>
       <path d="M6 21v-4h4"></path>
     </symbol>
-    <symbol id="icon-route" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="6" cy="19" r="3"></circle>
-      <circle cx="18" cy="5" r="3"></circle>
-      <path d="M12 19h4.5a3.5 3.5 0 0 0 0-7h-9a3.5 3.5 0 0 1 0-7H12"></path>
+    <symbol id="icon-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 7h10v9H3z"></path>
+      <path d="M13 10h4l4 4v2h-8z"></path>
+      <path d="M17 10v4h4"></path>
+      <circle cx="7" cy="17" r="2"></circle>
+      <circle cx="17" cy="17" r="2"></circle>
+      <path d="M9 17h6"></path>
     </symbol>
   </svg>
 
@@ -797,14 +821,14 @@
     <header class="topbar">
       <div class="brand">
         <div class="brand-mark">
-          <svg class="icon" aria-hidden="true"><use href="#icon-route"></use></svg>
+          <svg class="icon" aria-hidden="true"><use href="#icon-truck"></use></svg>
         </div>
         <div>
           <h1>TacoDiet Pro</h1>
           <p>Cálculo de kilómetros, dietas y pernoctas por país</p>
         </div>
       </div>
-      <span class="version-pill" id="file_version">Versión archivo v2.6</span>
+      <span class="version-pill" id="file_version">Versión v2.9</span>
     </header>
 
     <main class="workspace">
@@ -949,17 +973,25 @@
             <h3>Desglose diario</h3>
             <div class="daily-table-wrap">
               <table class="daily-table">
+                <colgroup>
+                  <col class="daily-col-day">
+                  <col span="8">
+                </colgroup>
                 <thead>
+                  <tr class="daily-group-row">
+                    <th rowspan="2">Día</th>
+                    <th colspan="4">España</th>
+                    <th colspan="4">Extranjero</th>
+                  </tr>
                   <tr>
-                    <th>Día</th>
-                    <th>Des. ES</th>
-                    <th>Com. ES</th>
-                    <th>Cena ES</th>
-                    <th>Pern. ES</th>
-                    <th>Des. EXT</th>
-                    <th>Com. EXT</th>
-                    <th>Cena EXT</th>
-                    <th>Pern. EXT</th>
+                    <th>Des.</th>
+                    <th>Com.</th>
+                    <th>Cena</th>
+                    <th>Pern.</th>
+                    <th>Des.</th>
+                    <th>Com.</th>
+                    <th>Cena</th>
+                    <th>Pern.</th>
                   </tr>
                 </thead>
                 <tbody id="daily_breakdown_rows"></tbody>
@@ -1042,7 +1074,7 @@
       frontera_retorno: "Obligatorio salvo cierre día 24.",
     };
 
-    const fileVersion = "v2.6";
+    const fileVersion = "v2.9";
     const monthNames = [
       "enero",
       "febrero",
@@ -1093,7 +1125,7 @@
       selectedDate: new Date(),
     };
     let lastSummary = "";
-    document.getElementById("file_version").textContent = `Versión archivo ${fileVersion}`;
+    document.getElementById("file_version").textContent = `Versión ${fileVersion}`;
 
     function setStatus(text) {
       statusEl.textContent = text;
